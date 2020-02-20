@@ -1,5 +1,5 @@
 <?php
-namespace Command\Test\Model\ResourceModel\Test;
+namespace Command\Log\Model\ResourceModel\Check;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

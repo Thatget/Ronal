@@ -1,8 +1,9 @@
 <?php
+namespace Command\Log\Controller\Adminhtml\Index;
 
 class Index extends \Magento\Backend\App\Action
 {
-protected $resultPageFactory = false;
+protected $resultPageFactory;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -16,8 +17,7 @@ protected $resultPageFactory = false;
     public function execute()
     {
     $resultPage = $this->resultPageFactory->create();
-    $resultPage->getConfig()->getTitle()->prepend((__('Posts')));
-
+    $resultPage->getConfig()->getTitle()->prepend((__('Check Execution Time')));
     return $resultPage;
 }
 

@@ -38,7 +38,7 @@ public function install(SchemaSetupInterface $setup, ModuleContextInterface $con
             'start_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable'=>true],
+            ['nullable'=>true,'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Create At'
         )->addColumn(
             'end_time',

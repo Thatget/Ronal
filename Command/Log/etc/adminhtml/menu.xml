@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Command_Log::helloworld" title="Check Execution time" module="Command_Log" sortOrder="51" resource="Command_Log::check"/>
+        <add id="Command_Log::check" title="Manage Time Check" module="Command_Log" sortOrder="10" action="log/index/index" resource="Command_Log::check" parent="Command_Log::helloworld"/>
+        <add id="Command_Log::check_configuration" title="Configuration" module="Command_Log" sortOrder="99" parent="Command_Log::helloworld" action="adminhtml/system_config/edit/section/helloworld" resource="Command_Log::check"/>
+    </menu>
+</config>

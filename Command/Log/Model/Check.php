@@ -1,6 +1,6 @@
 <?php
-namespace Command\Test\Model;
-class Test extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
+namespace Command\Log\Model;
+class Check extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     const CACHE_TAG = 'Command_check_post';
 

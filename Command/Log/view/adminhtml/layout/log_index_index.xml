@@ -3,7 +3,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="command_log_index"/>
+            <uiComponent name="command_log_listing"/>
         </referenceContainer>
     </body>
 </page>

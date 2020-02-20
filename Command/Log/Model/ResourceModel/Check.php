@@ -1,8 +1,8 @@
 <?php
-namespace Command\Test\Model\ResourceModel;
+namespace Command\Log\Model\ResourceModel;
 
 
-class Test extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Check extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
 
     public function __construct(
