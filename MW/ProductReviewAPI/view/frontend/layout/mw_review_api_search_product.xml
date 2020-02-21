@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+<container name="root">
+    <block class="MW\ProductReviewAPI\Block\Product\View\ListView" name="mw_product.info.product_additional_data" as="mw_product_additional_data" template="MW_ProductReview::product/view/list.phtml" cacheable="false" />
+    <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar">
+        <arguments>
+            <argument name="show_per_page" xsi:type="boolean">false</argument>
+            <argument name="show_amounts" xsi:type="boolean">false</argument>
+        </arguments>
+    </block>
+</container>
+</layout>

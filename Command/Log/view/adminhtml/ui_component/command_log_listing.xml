@@ -29,7 +29,7 @@
         <dataProvider class="Magento\Cms\Ui\Component\DataProvider" name="command_log_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>page_id</primaryFieldName>
+                <primaryFieldName>id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -41,10 +41,51 @@
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters"/>
+        <massaction name="listing_massaction">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Are you sure you want to delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="*/*/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="edit">
+                <settings>
+                    <callback>
+                        <target>editSelected</target>
+                        <provider>command_log_listing.command_log_listing.command_log_listing_data_source</provider>
+                    </callback>
+                    <type>edit</type>
+                    <label translate="true">Edit</label>
+                </settings>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="check_page_columns">
-        <column name="id" sortOrder="10">
+        <settings>
+            <editorConfig>
+                <param name="indexField" xsi:type="string">id</param>
+                <param name="enabled" xsi:type="boolean">true</param>
+                <param name="selectProvider" xsi:type="string">command_log_listing.command_log_listing.command_log_listing_data_source.ids</param>
+            </editorConfig>
+        </settings>
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>id</indexField>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">true</param>
+                    <param name="fixedX" xsi:type="boolean">false</param>
+                    <param name="fixedY" xsi:type="boolean">true</param>
+                    <param name="noSelectClass" xsi:type="string">_no-select</param>
+                </dndConfig>
+            </settings>
+        </selectionsColumn>
+        <column name="id" sortOrder="11">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">ID</label>
@@ -54,7 +95,7 @@
                 </dndConfig>
             </settings>
         </column>
-        <column name="start_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="11">
+        <column name="start_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="13">
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
@@ -79,22 +120,38 @@
         <column name="input" sortOrder="14">
             <settings>
                 <filter>text</filter>
-                <dataType>text</dataType>
+                <editor>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                    <editorType>text</editorType>
+                </editor>
                 <label translate="true">Input</label>
-                <dndConfig>
-                    <param name="enabled" xsi:type="boolean">true</param>
-                </dndConfig>
             </settings>
         </column>
         <column name="output" sortOrder="15">
             <settings>
                 <filter>text</filter>
-                <dataType>text</dataType>
+                <editor>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                    <editorType>text</editorType>
+                </editor>
                 <label translate="true">Output</label>
-                <dndConfig>
-                    <param name="enabled" xsi:type="boolean">true</param>
-                </dndConfig>
             </settings>
         </column>
+        <actionsColumn name="actions" class="Command\Log\Ui\Component\Listing\Column\Actions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="viewUrlPath" xsi:type="string">previewpopup/actionslog/preview</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">actions_id</item>
+                    <item name="urlEntityParamName" xsi:type="string">actions_id</item>
+                </item>
+            </argument>
+        </actionsColumn>
     </columns>
 </listing>

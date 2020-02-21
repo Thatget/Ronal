@@ -3,7 +3,7 @@ namespace Command\Log\Model\ResourceModel\Check;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-    protected $_idFieldName = 'new_command_id';
+    protected $_idFieldName = 'id';
     protected $_eventPrefix = 'command_log_collection';
     protected $_eventObject = 'check_collection';
 

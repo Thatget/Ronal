@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Review\Block\Product\Review $block */
+
+
+$productId = $block->getProductId();
+
+/** @var MW\ProductReview\Helper\Review $helperReview */
+$helperReview = $this->helper(\MW\ProductReview\Helper\Review::class);
+$product = $helperReview->getProduct($productId);
+$helperReview->getReviewsSummary($product);
+
+$ratingSummaryPercent = $helperReview->getRatingSummary($product);
+$reviewCount = $helperReview->getReviewsCount($product);
+$ratingPoint = round($ratingSummaryPercent * 5 / 100, 2) ;
+$ratingPoint = number_format((float)$ratingPoint, 1, '.', '');
+
+$dataVote = [
+    '5' => 0,
+    '4' => 0,
+    '3' => 0,
+    '2' => 0,
+    '1' => 0,
+];
+$dataVoteSum = 0;
+
+$_items = $helperReview->getReviewsCollection($productId)->addRateVotes()->getItems();
+
+foreach ($_items as $_review) {
+    $ratingVoteData = $_review->getData('rating_votes')->getData();
+    $ratingVoteData = $ratingVoteData[0];
+    $dataVote[$ratingVoteData['value']] += 1;
+    $dataVoteSum += 1;
+}
+
+?>
+
+
+<div class="review-rating-percent">
+
+    <div class="rating-percent">
+        <p>Select a row below to filter reviews.</p>
+        <?php foreach ($dataVote as $voteKey => $voteValue) : ?>
+            <div class="percent-bar">
+                <div class="rating-num"><?php echo $voteKey; ?> <i class="fa fa-star"></i></div>
+                <div class="progress"> <div class="progress-bar progress-bar-warning 5star" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round(($voteValue / $dataVoteSum) *100, 2) ?>%;"></div></div>
+                <div class="star-percent 5star-percent"><?php echo $voteValue ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="rating-average">
+        <span>Overall rating</span>
+        <div class="point-comment"><?php echo $ratingPoint; ?></div>
+        <div class="review-ratings">
+            <div class="rating-summary item" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating">
+                <span class="label rating-label"><span>Rating</span></span>
+                <div class="rating-result" title="<?php echo $ratingSummaryPercent; ?>%">
+                            <span style="width: <?php echo $ratingSummaryPercent; ?>%">
+                                <span itemprop="ratingValue"><?php echo $ratingSummaryPercent; ?>%</span>
+                            </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-rating-percent-actions">
+            <div>Tried this product before?</div>
+            <a href="#" class="btn">Write a review</a>
+        </div>
+    </div>
+</div>
+<div id="product-review-container" data-role="product-review"></div>
+<?= $block->getChildHtml() ?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Review/js/process-reviews": {
+                "productReviewUrl": "<?= $block->escapeJs($block->escapeUrl($block->getProductReviewUrl())) ?>",
+                "reviewsTabSelector": "#tab-label-reviews"
+            }
+        }
+    }
+</script>

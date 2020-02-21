@@ -1,0 +1,70 @@
+.sticky-product {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 4;
+    background-color: #fff;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
+    padding: 60px 0 15px 0;
+}
+.no-sticky-header {
+    padding: 15px 0;
+}
+> .container-product {
+    width: 100%;
+    max-width: 1140px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    clear: both;
+}
+.sticky-image {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+.product-image-photo {
+    max-height: 100%;
+    max-width: 100%;
+}
+sticky-detail{
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+.product-name-area .product-name {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 15px 0 0;
+    line-height: 25px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.actions-button{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -19px;
+    clear: right;
+}
+.action {
+    font-family: "Oswald";
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 100%;
+}
+.sticky-product .sticky-image {
+    border: 1px solid #ececec
+}
+.default_image {
+    position: static;
+}
+.product-image-photo {
+    margin-right: 0;
+}
+.hide {
+    display: none !important;
+}

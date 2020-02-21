@@ -1,0 +1,25 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+
+$mediaCollection = $block->getMediaCollection();
+$fieldName = $block->getFieldName();
+
+?>
+
+<?php if (count($mediaCollection)): ?>
+    <div>
+        <div>
+            <?php
+            foreach ($mediaCollection as $m) {
+                ?>
+                <div class="">
+                    <p><?php echo $block->getFieldValue($m->getData($fieldName)) ?></p>
+                </div>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+

@@ -20,6 +20,7 @@ class Change extends Command
     protected $testFactory;
     protected $_time;
     protected $_data;
+    protected $eventManager;
 
     public function __construct(
         String $name= null,
@@ -29,7 +30,8 @@ class Change extends Command
         \Magento\Inventory\Model\ResourceModel\Source\Collection $inventoryCollection,
         \Command\Test\Model\TestFactory $testFactory,
         DateTime $time,
-        \Magento\Framework\Json\Helper\Data $data
+        \Magento\Framework\Json\Helper\Data $data,
+        \Magento\Framework\Event\ManagerInterface $manager
     ) {
         $this->product = $product;
         $this->sourceItemsSave = $sourceItemsSave;
@@ -38,6 +40,7 @@ class Change extends Command
         $this->testFactory = $testFactory;
         $this->_time = $time;
         $this->_data = $data;
+        $this->eventManager = $manager;
         parent::__construct($name);
     }
 
@@ -72,7 +75,7 @@ class Change extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventManager->dispatch('my_module_event_after', ['myEventData' => '$eventData']);
+        $this->eventManager->dispatch('my_module_event_before', ['condition' => true,'value' =>12]);
         $this_time = $this->_time->gmtDate();
         $data['time'] = $this_time;
         $i=0;
@@ -121,6 +124,8 @@ class Change extends Command
             $i++;
         }
         $in = $this->_data->jsonEncode($data);
+        $this->eventManager->dispatch('my_module_event_before', ['condition' => false,'value' =>111]);
+        die('Quyet');
         if ($i!=0){
             $out = $this->_data->jsonEncode($data0);
             $this->setIntoTable($in,$out);

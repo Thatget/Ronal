@@ -5,5 +5,8 @@
         <referenceContainer name="content">
             <uiComponent name="command_log_listing"/>
         </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Command\Log\Block\Adminhtml\Index" name="command_log" template="Command_Log::activity/js.phtml"/>
+        </referenceContainer>
     </body>
 </page>

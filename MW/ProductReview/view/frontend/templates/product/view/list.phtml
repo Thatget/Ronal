@@ -1,0 +1,371 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+use Magento\Review\Block\Product\View\ListView;
+
+/** @var Magento\Review\Block\Product\View\ListView $block */
+
+$_items = $block->getReviewsCollection()->getItems();
+$format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+$product = $block->getProduct();
+
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$mediaDirectoryPath = $this->getUrl('pub/media/mw_product_review');
+$ageOptions = $_objectManager->get('MW\ProductReview\Model\Options\Age')->toOptionArray();
+$skinTypeOptions = $_objectManager->get('MW\ProductReview\Model\Options\SkinType')->toOptionArray();
+$skinConcernOptions = $_objectManager->get('MW\ProductReview\Model\Options\SkinConcern')->toOptionArray();
+/** @var MW\ProductReview\Helper\Data $helper */
+$helper = $this->helper(\MW\ProductReview\Helper\Data::class);
+
+$theReviewVote = $_objectManager->get('\MW\ProductReview\Model\VoteFactory')->create();
+$theReviewVoteCollection = $theReviewVote->getCollection()
+    ->addFieldToFilter('product_id',
+        ['eq' => $product->getId()]
+    )->addFieldToFilter('vote_data',
+        ['eq' => '1']
+    )->load();
+$reviewVoteData = [];
+foreach ($theReviewVoteCollection as $reviewVote) {
+    if($reviewVote->getVoteData() == 1) {
+        if (!array_key_exists($reviewVote->getReviewId(), $reviewVoteData)) {
+            $reviewVoteData[$reviewVote->getReviewId()] = $reviewVote->getVoteData();
+        } else {
+            $reviewVoteData[$reviewVote->getReviewId()] = $reviewVoteData[$reviewVote->getReviewId()] + 1;
+        }
+    }
+}
+$reviewVoteDataSort = $reviewVoteData;
+rsort($reviewVoteDataSort);
+
+?>
+
+<?php if (count($_items)):?>
+    <div class="block review-list" id="customer-reviews">
+        <div class="block-title">
+            <strong><?= $block->escapeHtml(__('Customer Reviews')) ?></strong>
+        </div>
+        <div class="block-content">
+
+            <div class="review-header">
+                <div class="review-count">1-8 of 18 Reviews</div>
+                <div class="review-header-right">
+                    <div class="review-search">
+                        <input type="text" id="search_review_keyword" name="keyword" value="<?= $block->getSearchKeyword() ?>" placeholder="Search topics and reviews" class="input-search">
+                        <button id="search_review" class="btn-search"><span>search</span></button>
+                    </div>
+
+                    <div class="review-sort">
+                        <div class="review-sort__title ">
+                            <span class="review-sort-item__title"
+                                  data-toggle="dropdown"
+                                  aria-haspopup="true"
+                                  data-mage-init='{"dropdown":{}}'>
+                                Sort by: <span>Most q</span>
+                            </span>
+                            <div class="review-sort__content" data-target="dropdown">
+                                <ul>
+                                    <li> <a href="#">Most Recent</a> </li>
+                                    <li> Most Popular </li>
+                                    <li> Not Recent </li>
+                                </ul>
+                            </div>
+                            <input type="hidden" id="search_review_sort" name="search_review_sort" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="review-filter">
+                <div class="review-filter-item">
+                    <span class="review-filter-item__title"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        data-mage-init='{"dropdown":{}}'>
+                        Age
+                    </span>
+
+                    <div class="review-filter-item__content" data-target="dropdown">
+                        <ul>
+                            <li> <a href="#">Age</a> </li>
+                            <li> Age</li>
+                            <li> Age</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="review-filter-item">
+                    <span class="review-filter-item__title"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        data-mage-init='{"dropdown":{}}'>
+                        Rating
+                    </span>
+
+                    <div class="review-filter-item__content" data-target="dropdown">
+                        <ul>
+                            <li> <a href="#">Age</a> </li>
+                            <li> Age</li>
+                            <li> Age</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="review-filter-item">
+                    <span class="review-filter-item__title"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        data-mage-init='{"dropdown":{}}'>
+                        Skin Type
+                    </span>
+
+                    <div class="review-filter-item__content" data-target="dropdown">
+                        <ul>
+                            <li> <a href="#">Age</a> </li>
+                            <li> Age</li>
+                            <li> Age</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="review-filter-item">
+                    <span class="review-filter-item__title"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        data-mage-init='{"dropdown":{}}'>
+                        Skin Concern
+                    </span>
+
+                    <div class="review-filter-item__content" data-target="dropdown">
+                        <ul>
+                            <li> <a href="#">Acne/Oiliness       </a> </li>
+                            <li> Clogged Pores </li>
+                            <li class="active"> Dehydration</li>
+                            <li> FineLines/Wrinkles</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="review-filter-curent">
+                    <div class="title">Active Filters </div>
+                    <div class="review-filter-curent-item">
+                        <span>Fine Lines/Wrinkles</span>
+                        <a href="#" class="review-filter-curent-remove"><span>remove</span></a>
+                    </div>
+                    <div class="review-filter-curent-item review-filter-curent-clear">
+                        <span>Clear All</span>
+                        <a href="#" class="review-filter-curent-remove"><span>Clear All</span></a>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="search_review_filter" name="search_review_filter" value="">
+
+
+            <div class="toolbar review-toolbar">
+                <?= $block->getChildHtml('toolbar') ?>
+            </div>
+            <ol class="items review-items">
+                <?php foreach ($_items as $_review):?>
+                    <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+                        <div class="review-left">
+                            <p class="review-author">
+                                <span class="review-details-label"><?= $block->escapeHtml(__('Review by')) ?></span>
+                                <strong class="review-details-value" itemprop="author"><?= $block->escapeHtml($_review->getNickname()) ?></strong>
+                            </p>
+                            <div class="review-text">
+                                <div>Evie. S Singapore, SG  </div>
+                                <?php
+                                $theReviewInfo = $_objectManager->get('\MW\ProductReview\Model\ReviewFactory')->create()->load($_review->getReviewId(), 'review_id');
+                                if ($theReviewInfo->getData('review_id')) :
+                                    $theReviewVote = $_objectManager->get('\MW\ProductReview\Model\VoteFactory')->create();
+                                    $theReviewVoteCollection = $theReviewVote->getCollection()
+                                    ->addFieldToFilter('review_id',
+                                        ['eq' => $_review->getReviewId()]
+                                    )->addFieldToFilter('product_id',
+                                        ['eq' => $product->getId()]
+                                    )->addFieldToFilter('vote_data',
+                                        ['eq' => '1']
+                                    );
+
+                                    if (array_key_exists($_review->getReviewId(), $reviewVoteData)) {
+                                        $countOfThisVote = $reviewVoteData[$_review->getReviewId()];
+                                        $rankOfThisVote = array_search($countOfThisVote, $reviewVoteDataSort) + 1;
+                                    } else {
+                                        $countOfThisVote = 0;
+                                        $rankOfThisVote = 0;
+                                    }
+                                ?>
+                                    <div><?php echo __("Age: ") . $ageOptions[$theReviewInfo->getData('age')] ?></div>
+                                    <div><?php echo __("Skin Type: ") . $skinTypeOptions[$theReviewInfo->getData('skin_type')] ?></div>
+                                    <div><?php echo __("Skin Cocern: ") . $skinConcernOptions[$theReviewInfo->getData('skin_concern')] ?></div>
+                                    <div class="review-vote"><?php echo __("Review #%1 <br>%2 Votes", $rankOfThisVote, $countOfThisVote); ?></div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="review-details">
+                            <?php if (count($_review->getRatingVotes())): ?>
+                                <div class="review-ratings">
+                                    <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                                        <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                                            <span class="label rating-label"><span><?= $block->escapeHtml($_vote->getRatingCode()) ?></span></span>
+                                            <div class="rating-result" title="<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                                                <meta itemprop="worstRating" content = "1"/>
+                                                <meta itemprop="bestRating" content = "100"/>
+                                                <span style="width:<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                                                    <span itemprop="ratingValue"><?= $block->escapeHtml($_vote->getPercent()) ?>%</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            <p class="review-date">
+                                <span class="review-details-label"><?= $block->escapeHtml(__('Posted on')) ?></span>
+                                <time class="review-details-value" itemprop="datePublished" datetime="<?= $block->escapeHtmlAttr($block->formatDate($_review->getCreatedAt(), $format)) ?>"><?= $block->escapeHtml($block->formatDate($_review->getCreatedAt(), $format)) ?></time>
+                            </p>
+                            <div class="review-title" itemprop="name"><?= $block->escapeHtml($_review->getTitle()) ?></div>
+                            <div class="review-content" itemprop="description">
+                                <?= nl2br($block->escapeHtml($_review->getDetail())) ?>
+                            </div>
+                            <div class="review-img review-attachments">
+                                <div class="review-media-value">
+                                    <?php
+                                    $thisReviewMediaCollection = $_objectManager->get('\MW\ProductReview\Model\ReviewMediaFactory')
+                                        ->create()
+                                        ->getCollection()
+                                        ->addFieldToFilter('review_id', $_review->getReviewId());
+                                    if (count($thisReviewMediaCollection))
+                                        foreach ($thisReviewMediaCollection as $m) {
+                                            ?>
+                                            <div class="image item base-image" data-role="image">
+                                                <div class="product-image-wrapper">
+                                                    <img class="product-image" data-role="image-element"
+                                                         src="<?php echo rtrim($mediaDirectoryPath, '/') . $m->getMediaUrl(); ?>"
+                                                         alt="Image">
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="review-helpful">
+                                <span>Helpful?</span>
+                                <a href="#" class="action helpful-btn" data-post='<?php echo $helper->getTargetVotePostData(['review_id' => $_review->getReviewId(), 'vote' => '1', 'product_id' => $_review->getData('entity_pk_value')]) ?>'>Yes . <?php echo $helper->getVoteCounter($_review->getReviewId(), '1'); ?></a>
+                                <a href="#" class="helpful-btn" data-post='<?php echo $helper->getTargetVotePostData(['review_id' => $_review->getReviewId(), 'vote' => '2', 'product_id' => $_review->getData('entity_pk_value')]) ?>'>No .  <?php echo $helper->getVoteCounter($_review->getReviewId(), '2'); ?></a>
+                                <a href="#" class="helpful-btn" data-post='<?php echo $helper->getTargetReportPostData(['review_id' => $_review->getReviewId(), 'product_id' => $_review->getData('entity_pk_value')]) ?>'>Report</a>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+
+            <div id="review-image-modal" style="display:none;">
+                <img id="review-image-lg" src="" alt="review-image"/>
+            </div>
+
+            <script>
+                require(
+                    [
+                        'jquery',
+                        'Magento_Ui/js/modal/modal'
+                    ],
+                    function ($, modal) {
+                        $(".product-image").on('click', function () {
+
+                            $("#review-image-modal").html("");
+                            $("#review-image-modal").prepend('<img id="review-image-lg" src="' + $(this).attr("src") + '"/>');
+
+                            $("#review-image-modal").modal({
+                                type: 'popup',
+                                title: 'Review Image',
+                                clickableOverlay: true,
+                                buttons: [],
+                                responsive: true
+                            }).modal('openModal').css({"text-align": "center"});
+                        });
+                    }
+                );
+            </script>
+
+            <script>
+                require(
+                    [
+                        'jquery',
+                        'Magento_Ui/js/modal/modal'
+                    ],
+                    function ($) {
+                        $('#customer-reviews').trigger('contentUpdated');
+                        /*if ($.fn.applyBindings != undefined) {
+                            $('#your-selector').applyBindings();
+                        }*/
+                    }
+                );
+            </script>
+
+            <script type="text/x-magento-init">
+                {
+                    "#customer-reviews": {
+                        "mwReviewSearch": {
+                            "productReviewSearchUrl": "<?= $block->escapeJs($block->escapeUrl($helper->getProductReviewSearchUrl($product->getId()))) ?>"
+                        }
+                    }
+                }
+            </script>
+
+            <div class="toolbar review-toolbar">
+                <?= $block->getChildHtml('toolbar') ?>
+            </div>
+        </div>
+    </div>
+    <style>
+        .image .product-image {
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            max-height: 100%;
+            max-width: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+
+        .image .product-image-wrapper {
+            background: #ffffff;
+            border: 1px solid #cccccc;
+            box-sizing: border-box;
+            cursor: pointer;
+            height: 150px;
+            line-height: 1;
+            overflow: hidden;
+            position: relative;
+            width: 150px;
+        }
+
+        .image {
+            background: #ffffff;
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 1.2rem;
+            position: relative;
+            vertical-align: top;
+            width: 150px;
+        }
+
+        .image .product-image-wrapper:hover .product-image {
+            opacity: .5;
+        }
+
+
+        .catalog-product-view .modal-popup .modal-header,
+        .catalog-product-view .modal-popup .modal-content{
+            border: none;
+            box-shadow: none;
+            border-radius: unset;
+        }
+    </style>
+<?php endif;?>

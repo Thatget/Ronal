@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="smart_view" translate="label" sortOrder="50">
+            <label>View Pro !</label>
+        </tab>
+        <section id="viewpro_settings" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Enable ViewPro</label>
+            <tab>smart_view</tab>
+                <resource>Smartwave_Porto::config</resource>
+                <group id="view_pro" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>General</label>
+                    <field id="enable_addtocart_sticky" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Addtocart Sticky</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="enable" translate="label comment" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable popup</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="logo_src" translate="label comment" type="image" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Logo View Popup</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                        <upload_dir config="system/filesystem/media" scope_info="1">popup/image/logo_src</upload_dir>
+                        <base_url type="media" scope_info="1">popup/image/logo_src</base_url>
+                        <comment>
+                            <![CDATA[Logo for Popup only. If empty, default will be used.<br />(jpeg, gif, png)]]>
+                        </comment>
+                    </field>
+                </group>
+        </section>
+    </system>
+</config>

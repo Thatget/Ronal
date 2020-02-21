@@ -1,0 +1,19 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+$mediaCollection = $block->getMediaCollection();
+$fieldName = $block->getFieldName();
+?>
+<div>
+    <div>
+        <div class="">
+            <?php if($fieldName == 'vote') : ?>
+                <p><?php echo __("Yes: ") . $block->getFieldValue(1) ?> <?php echo __("No: ")  . $block->getFieldValue(2) ?></p>
+            <?php endif; ?>
+            <?php if($fieldName == 'report') : ?>
+                <p><?php echo $block->getFieldValue() ?></p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+
