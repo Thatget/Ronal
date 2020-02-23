@@ -8,39 +8,37 @@
 
 //<![CDATA[
         Window.keepMultiModalWindow = true;
-        var adminActivityLogView = {
+        var aureatelabsView = {
             overlayShowEffectOptions : null,
             overlayHideEffectOptions : null,
             modal: null,
-            activityId: 0,
-            open : function(editorUrl, elementId, revertable) {
-                if (editorUrl && elementId) {
+            open : function(viewUrl, elementId) {
+                if (viewUrl && elementId) {
                     jQuery.ajax({
-                        url: editorUrl,
+                        url: viewUrl,
                         data: {
                             id: elementId
                         },
                         showLoader: true,
                         dataType: 'html',
                         success: function(data, textStatus, transport) {
-                            this.openDialogWindow(data, elementId, revertable);
+                            this.openDialogWindow(data, elementId);
                         }.bind(this)
                     });
                 }
             },
-            openDialogWindow : function(data, elementId, revertable) {
+            openDialogWindow : function(data, elementId) {
                 var self = this;
-                this.activityId = elementId;
                 if (this.modal) {
                     this.modal.html(jQuery(data).html());
                 } else {
                     this.modal = jQuery(data).modal({
-                        title: '<?= __('Actions Log'); ?>',
+                        title: '<?= /* @escapeNotVerified */ __('Grid View'); ?>',
                         modalClass: 'magento',
                         type: 'slide',
                         firedElementId: elementId,
                         buttons: [{
-                            text: jQuery.mage.__('Back'),
+                            text: jQuery.mage.__('Close'),
                             class: 'action- scalable back',
                             click: function () {
                                 self.closeDialogWindow(this);
@@ -51,12 +49,7 @@
                         }
                     });
                 }
-                jQuery(".action-revert-activity").hide();
-                if(revertable == 1) {
-                    jQuery(".action-revert-activity").show();
-                }
                 this.modal.modal('openModal');
-                this.autoResize();
             },
             closeDialogWindow : function(dialogWindow) {
 
@@ -64,32 +57,10 @@
                 dialogWindow.closeModal();
                 Windows.overlayShowEffectOptions = this.overlayShowEffectOptions;
                 Windows.overlayHideEffectOptions = this.overlayHideEffectOptions;
-            },
-            error: function (message) {
-                jQuery('body').notification('clear')
-                    .notification('add', {
-                        error: true,
-                        message: jQuery.mage.__(message),
-                        insertMethod: function (message) {
-                            var $wrapper = jQuery('<div/>').html(message);
-                            jQuery('.page-main-actions').after($wrapper);
-                        }
-                    });
-            },
-            autoResize: function () {
-                jQuery.each(jQuery('textarea.value-container'), function() {
-                    var offset = this.offsetHeight - this.clientHeight;
-                    var resizeTextarea = function(el) {
-                        console.log('You clicked me!!');
-                        jQuery(el).css('height', 'auto').css('height', el.scrollHeight + offset);
-                    };
-                    jQuery(this).unbind().on('click', function() { resizeTextarea(this); }).trigger('click');
-                });
             }
         };
 
-        window.adminActivityLogView = adminActivityLogView;
+        window.aureatelabsView = aureatelabsView;
 //]]>
-
     });
 </script>

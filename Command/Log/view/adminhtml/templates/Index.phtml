@@ -1,63 +1,34 @@
-<?php
-
-$collection = $block->getModificationDetails();
-// I wanted to show custom collection Data in grid so i've added this code you can make changes according to your requirements.
-if($collection->getSize() > 0)
-{
-    ?>
-    <div class="grid">
-        <div class="admin__table-wrapper">
-            <table cellspacing="0" class="data-grid">
-                <thead>
-                <tr class="headings">
-                    <th class="data-grid-th">Name</th>
-                    <th class="data-grid-th">Old Value</th>
-                    <th class="data-grid-th">New Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="data-grid-controls-row data-row ">
-                    <td align="center" colspan="3" class="data-grid-checkbox-cell ammodel">Magento\User\Model\User\Interceptor</td>
-                </tr>
-                <?php foreach ($collection as $collections) {
-                    ?>
-                    <tr class="data-grid-controls-row data-row _odd-row">
-                        <td><?= $collections->getName(); ?></td>
-                        <td class="onlyDeletions">
-                        <pre>
-                            <ins><?= $collections->getNewValue(); ?></ins>
-                            <del><?= $collections->getOldValue(); ?></del>
-                        </pre>
-                        </td>
-                        <td class="onlyInsertions">
-                        <pre>
-                            <ins><?= $collections->getNewValue(); ?></ins>
-                            <del><?= $collections->getOldValue(); ?></del>
-                        </pre>
-                        </td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
+<fieldset class="admin__fieldset">
+    <div class="admin__field ">
+        <div class="admin__field-label">
+            <lable>Start Time</lable>
+        </div>
+        <div class="admin__field-control">
+            <input disabled class="admin__control-text" type="text" value="<?php echo $block->getcheckValue()['start_time'] ?>">
         </div>
     </div>
-<?php } else { ?>
-    <div class="grid">
-        <div class="admin__table-wrapper">
-            <table cellspacing="0" class="data-grid">
-                <thead>
-                <tr class="headings">
-                    <th class="data-grid-th">Name</th>
-                    <th class="data-grid-th">Old Value</th>
-                    <th class="data-grid-th">New Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="data-grid-controls-row data-row _odd-row">
-                    <td align="center" colspan="3" class="dashboard-advanced-reports-content">We couldn't find any records.</td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="admin__field">
+        <div class="admin__field-label">
+            <lable>Start Time</lable>
+        </div>
+        <div class="admin__field-control">
+            <textarea class="admin__control-textarea" type="text"><?php echo $block->getcheckValue()['input'] ?></textarea>
         </div>
     </div>
-<?php } ?>
+    <div class="admin__field">
+        <div class="admin__field-label">
+            <lable for="output">Start Time</lable>
+        </div>
+        <div class="admin__field-control">
+            <textarea id="output" class="admin__control-textarea" type="text"><?php echo $block->getcheckValue()['output'] ?></textarea>
+        </div>
+    </div>
+    <div class="admin__field ">
+        <div class="admin__field-label">
+            <lable>Start Time</lable>
+        </div>
+        <div class="admin__field-control">
+            <input disabled class="admin__control-text" type="text" value="<?php echo $block->getcheckValue()['end_time'] ?>">
+        </div>
+    </div>
+</fieldset>

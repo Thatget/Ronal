@@ -21,7 +21,7 @@
     <dataSource name="command_log_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
-                <param name="indexField" xsi:type="string">page_id</param>
+                <param name="indexField" xsi:type="string">id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
@@ -141,15 +141,12 @@
                 <label translate="true">Output</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Command\Log\Ui\Component\Listing\Column\Actions">
+        <actionsColumn name="entity_id" class="Command\Log\Ui\Component\Listing\Column\Actions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                    <item name="viewUrlPath" xsi:type="string">previewpopup/actionslog/preview</item>
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">actions_id</item>
-                    <item name="urlEntityParamName" xsi:type="string">actions_id</item>
+                    <item name="viewUrlPath" xsi:type="string">log/actionslog/preview</item>
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
                 </item>
             </argument>
         </actionsColumn>

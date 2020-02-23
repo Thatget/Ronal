@@ -2,14 +2,16 @@
 
 namespace Command\Log\Ui\Component\Listing\Column;
 
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\UrlInterface;
 
 class Actions extends Column
 {
-    protected $urlBuilder;
+    public $urlBuilder;
+
+    public $layout;
 
     public function __construct(
         ContextInterface $context,
@@ -24,10 +26,6 @@ class Actions extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
-    /**
-     * Get item url
-     * @return string
-     */
     public function getViewUrl()
     {
         return $this->urlBuilder->getUrl(
@@ -38,22 +36,21 @@ class Actions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as &$item) {
-                if (isset($item['actions_id'])) {
-                    $name = $this->getData('name');
-
-                    $item[$name] = html_entity_decode('<a href="#" class="action-activity-log-view" 
-                        onclick="adminActivityLogView.open(\''
-                        . $this->getViewUrl() . '\', \'' .
-                        $item['actions_id']. '\', \'' .
-                        $item['restore'] . '\')'
-                        .'")>'. __('Preview Changes').'</a>
-                                <br/>
-                                <a href="'.$this->urlBuilder->getUrl(
-                            'previewpopup/actionslog/edit',
-                            ['actions_id' => $item['actions_id']]
-                        ).'">'. __('View Details').'</a>');
-                    //View Details is not needed i've just added according to my requirement
+            foreach ($dataSource['data']['items'] as & $item) {
+                if (isset($item['id'])) {
+                    $item[$this->getData('name')] = $this->layout->createBlock(
+                        \Magento\Backend\Block\Widget\Button::class,
+                        '',
+                        [
+                            'data' => [
+                                'label' => __('View'),
+                                'type' => 'button',
+                                'disabled' => false,
+                                'class' => 'aureatelabs-grid-view',
+                                'onclick' => 'aureatelabsView.open(\''. $this->getViewUrl().'\', \''.$item['id'].'\')',
+                            ]
+                        ]
+                    )->toHtml();
                 }
             }
         }

@@ -2,34 +2,33 @@
 
 namespace Command\Log\Controller\Adminhtml\ActionsLog;
 
-use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\View\LayoutFactory;
 
-class Preview extends Action
-{
+class Preview extends Action{
 
-    public $resultRawFactory;
-    public $layoutFactory;
+    protected $_rawFactory;
+    protected $_layoutFactory;
 
     public function __construct(
-        Context $context,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
-    ) {
-        $this->resultRawFactory = $resultRawFactory;
-        $this->layoutFactory = $layoutFactory;
-
+        Action\Context $context,
+        RawFactory $rawFactory,
+        LayoutFactory $layoutFactory
+    )
+    {
+        $this->_rawFactory = $rawFactory;
+        $this->_layoutFactory = $layoutFactory;
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $content = $this->layoutFactory->create()
-            ->createBlock(
-                \Command\Log\Block\Adminhtml\ActionsLog\Preview::class
-            );
-
-        $resultRaw = $this->resultRawFactory->create();
-        return $resultRaw->setContents($content->toHtml());
+        $content = $this->_layoutFactory->create()
+            ->createBlock(\Command\Log\Block\Adminhtml\Index::class);
+        $result = $this->_rawFactory->create();
+        return $result->setContents($content->toHtml());
     }
 }
